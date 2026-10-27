@@ -140,7 +140,32 @@ h2.pick{font-family:var(--f-title);font-weight:800;font-size:22px;margin:38px 0 
 
 /* 강의 */
 .player{margin-top:18px;position:relative;aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:#18181B}
-.player iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.player #ytp,.player iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.player:focus{outline:none}
+.pblock{position:absolute;left:0;right:0;z-index:2}
+.pblock.top{top:0;height:24%}.pblock.bot{bottom:0;height:26%}
+.player.started .pblock{top:0;bottom:0;height:auto}
+.player.started .pblock.bot{display:none}
+.pshade{position:absolute;inset:0;z-index:3;pointer-events:none;opacity:0;transition:opacity .2s;background:linear-gradient(rgba(0,0,0,.45),rgba(0,0,0,.94) 72%)}
+.player.started.paused .pshade{opacity:1}
+.pov{position:absolute;inset:0;z-index:4;display:grid;place-items:center;cursor:pointer;width:100%}
+.pbig{width:72px;height:72px;border-radius:50%;background:rgba(255,255,255,.95);color:#111;display:grid;place-items:center}
+.pbig svg{width:30px;height:30px;margin-left:3px}
+.pend{position:absolute;inset:0;z-index:6;background:#111113;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;padding:20px}
+.pend .btn{color:var(--ink)}
+.pend b{font-family:var(--f-title);font-size:20px}.pend span{color:#A1A1AA;font-size:14px;word-break:keep-all}.pend .btn{margin-top:8px}
+.pctl{position:absolute;left:0;right:0;bottom:0;z-index:5;padding:28px 12px 8px;background:linear-gradient(transparent,rgba(0,0,0,.78));color:#fff;opacity:0;transition:opacity .2s}
+.player.ui .pctl,.player.paused .pctl{opacity:1}
+.player.started:not(.ui):not(.paused){cursor:none}
+.prow{display:flex;align-items:center;gap:2px}
+.pb{width:40px;height:40px;display:grid;place-items:center;border-radius:8px;color:#fff}
+.pb:hover{background:rgba(255,255,255,.14)}
+.pspd{width:auto;padding:0 10px;font-weight:700;font-size:14px}
+.ptime{font-family:var(--f-mono);font-size:13px;margin-left:6px;white-space:nowrap}
+.prow .sp{flex:1}
+.pseek{display:block;width:100%;height:18px;margin:0 0 2px;accent-color:#fff;cursor:pointer;background:transparent}
+.player:fullscreen{border-radius:0;aspect-ratio:auto;width:100%;height:100%}
+.player.pfull{position:fixed;inset:0;z-index:100;border-radius:0;margin:0!important;aspect-ratio:auto}
 .player .empty{position:absolute;inset:0;display:grid;place-items:center;text-align:center;color:#A1A1AA;font-size:14px;padding:20px}
 .player .empty b{display:block;color:#fff;font-size:17px;margin-bottom:4px}
 .acts{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;align-items:center}
@@ -181,50 +206,7 @@ h2.pick{font-family:var(--f-title);font-weight:800;font-size:22px;margin:38px 0 
 .res .go{font-size:13px;color:var(--mu);white-space:nowrap}
 a.res:hover{background:var(--side)}
 .emptymsg{padding:28px 6px;color:var(--mu);font-size:14px}
-.lcards{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.lcard{display:grid;grid-template-columns:44px minmax(0,1fr) 12px;gap:14px;align-items:center;border:1px solid var(--ln);border-radius:16px;padding:18px 20px}
-.lcard:hover{background:var(--side)}
-.lcard .code svg{width:22px;height:22px}
-.lcard .code{width:44px;height:44px;border-radius:12px;background:var(--black);border-color:var(--black);color:#fff;font-size:16px}
-.lt b{display:block;font-family:var(--f-title);font-weight:800;font-size:17px}
-.lt small{display:block;font-size:13px;color:var(--mu);margin-top:2px}
-.lt em{display:block;font-style:normal;font-size:12.5px;color:var(--ink2);margin-top:6px}
-.gchips{display:flex;gap:6px;flex-wrap:wrap;margin-top:18px}
-.gchip{height:34px;padding:0 14px;border-radius:999px;border:1px solid var(--ln);font-size:14px;font-weight:700;background:#fff}
-.gchip:hover{background:var(--soft)}
 .lecs .res:last-child{border-bottom:0}
-.gchip.on{background:var(--black);border-color:var(--black);color:#fff}
-.bhrow{display:flex;align-items:baseline;justify-content:space-between}
-.more{font-size:13px;color:var(--mu);font-weight:700}
-.more:hover{color:var(--ink)}
-.calcard{display:block;border:1px solid var(--ln);border-radius:16px;padding:10px 20px}
-.calcard:hover{background:var(--side)}
-.ev{display:flex;gap:16px;align-items:baseline;padding:10px 0;font-size:15px}
-.ev+.ev{border-top:1px solid var(--ln)}
-.evd{flex:none;min-width:150px;font-size:13.5px;color:var(--mu);font-weight:500}
-.evt{word-break:keep-all}.evt small{font-size:12px;color:var(--mu);margin-left:4px}
-.tp{display:inline-block;font-size:11.5px;font-weight:700;padding:1px 8px;border-radius:999px;margin-right:8px;vertical-align:1px}
-.t-exam{background:#FEE2E2;color:#B91C1C}.t-off{background:#F4F4F5;color:#52525B}.t-make{background:#DBEAFE;color:#1D4ED8}.t-spec{background:#FEF3C7;color:#B45309}.t-evt{background:#DCFCE7;color:#15803D}
-.calhead{display:flex;align-items:center;justify-content:space-between;gap:12px}
-.calnav{display:flex;gap:6px}.calnav .btn{height:36px;padding:0 12px;font-size:15px}
-.cal{margin-top:16px;border:1px solid var(--ln);border-radius:14px;overflow:hidden}
-.cw{display:grid;grid-template-columns:repeat(7,1fr);background:var(--side);border-bottom:1px solid var(--ln)}
-.cw span{text-align:center;font-size:12.5px;font-weight:700;color:var(--mu);padding:8px 0}
-.cw .sun,.cd.sun .dn{color:#DC2626}.cw .sat,.cd.sat .dn{color:#2563EB}
-.cg{display:grid;grid-template-columns:repeat(7,1fr)}
-.cd{min-height:104px;padding:6px 6px 8px;border-right:1px solid var(--ln);border-bottom:1px solid var(--ln);display:flex;flex-direction:column;gap:3px;min-width:0}
-.cd:nth-child(7n){border-right:0}
-.cg .cd:nth-last-child(-n+7){border-bottom:0}
-.cd.out{background:#FCFCFC}
-.dn{font-size:13px;font-weight:700;width:24px;height:24px;display:grid;place-items:center;border-radius:50%}
-.cd.today .dn{background:var(--black);color:#fff!important}
-.ce{display:block;font-size:11.5px;font-weight:700;padding:2px 6px;border-radius:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.cdots{display:none}
-.legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px;font-size:12.5px;color:var(--mu)}
-.legend span{display:flex;align-items:center;gap:5px}.legend i{width:10px;height:10px;border-radius:3px}
-.cdots i.t-exam,.legend i.t-exam{background:#EF4444}.cdots i.t-off,.legend i.t-off{background:#A1A1AA}.cdots i.t-make,.legend i.t-make{background:#3B82F6}.cdots i.t-spec,.legend i.t-spec{background:#F59E0B}.cdots i.t-evt,.legend i.t-evt{background:#22C55E}
-.evlist{border-top:1px solid var(--ln);border-bottom:1px solid var(--ln)}
-.evlist .ev{padding:12px 4px}
 .flogo{display:block;width:200px;height:auto;margin:22px 0 0;mix-blend-mode:multiply}
 .foot{margin-top:48px;padding:20px 0 40px;border-top:1px solid var(--ln);font-size:12px;line-height:1.75;color:var(--mu2);white-space:pre-line;word-break:keep-all}
 
@@ -275,6 +257,9 @@ select.gin{font-size:15px;letter-spacing:0;margin-bottom:8px}
   .player{margin-left:-16px;margin-right:-16px;border-radius:0}
   .panel{grid-template-columns:1fr}
   .acts .btn{flex:1}
+  .pb{width:36px;height:36px}
+  .pctl{padding:22px 6px 4px}
+  #pback,#pfwd{display:none}
   .acts .sp{display:none}
   .row{grid-template-columns:44px minmax(0,1fr) 12px;gap:12px}
   .row .pr{grid-column:2;text-align:left;margin-top:-6px}
@@ -286,14 +271,6 @@ select.gin{font-size:15px;letter-spacing:0;margin-bottom:8px}
   .ni{flex-direction:column;gap:6px;padding:12px 0}
   .ni p{font-size:15px}
   .board{padding:16px 16px 18px}
-  .lcards{grid-template-columns:1fr}
-  .cd{min-height:52px;padding:4px 2px;align-items:center}
-  .ce{display:none}
-  .cdots{display:flex;gap:2px}.cdots i{width:6px;height:6px;border-radius:50%}
-  .dn{font-size:12.5px}
-  .ev{flex-direction:column;gap:2px}
-  .evd{min-width:0}
-  .calcard{padding:6px 16px}
   .bh{margin-top:26px}
   .bgrid{grid-template-columns:1fr;gap:18px}
   .hint .pc{display:none}.hint .mo{display:inline}
@@ -312,6 +289,10 @@ select.gin{font-size:15px;letter-spacing:0;margin-bottom:8px}
    - quiz 는 눌러야 정답이 보여요.
    ===================================================================== */
 const SITE = {
+  // ── 구글 시트 연결 ──
+  // 앱스 스크립트 '웹 앱' 주소를 붙여 넣으면, 반·강의영상·반별자료·공지·오늘의 문장을 시트에서 읽어 와요.
+  // 비워 두면 아래에 적힌 내용을 그대로 써요.
+  dataUrl: 'https://script.google.com/macros/s/AKfycbyaB0Mzqb1C20qmDtixauihjWv5Av49U8IOENn91eewl0o5TKPux9REHKCzNQ53E1eIiQ/exec',
   term: '2026학년도 2학기',
   eyebrow: '38인의 수학생각 송인준 선생님 LMS',   // 첫 화면 제목 위 작은 글씨
   title: '복습 강의실',
@@ -370,34 +351,6 @@ const SITE = {
     '시청 후 ‘다 들었어요’를 눌러 표시합니다.',
     '학습 내용은 풀이노트에 정리해서 등원합니다.'
   ],
-  // ── 학습자료 (첫 화면 '학습자료' → 중등과정 / 고등과정 페이지) ──
-  // 자료 하나 = { title: 제목, grade: '중2' 같은 학년(필터로 쓰여요), tag: 단원·종류, date: 'YYYY-MM-DD', url: 링크 }
-  // url 에는 구글 드라이브 '링크 공유' 주소를 붙여 넣거나,
-  // GitHub 저장소에 files 폴더를 만들어 PDF를 올린 뒤 'files/파일이름.pdf' 처럼 적으면 돼요.
-  library: {
-    middle: {
-      name: '중등과정', desc: '중1 · 중2 · 중3 개념 정리와 학습지',
-      items: [
-        { title: '삼각형의 성질 개념 정리', grade: '중2', tag: '개념 정리', date: '2026-10-20', url: '' },
-        { title: '일차방정식의 활용 학습지', grade: '중1', tag: '학습지', date: '2026-10-15', url: '' }
-      ]
-    },
-    high: {
-      name: '고등과정', desc: '공통수학 · 대수 · 미적분 자료',
-      items: [
-        { title: '다항식의 연산 개념 정리', grade: '고1', tag: '공통수학1', date: '2026-10-10', url: '' }
-      ]
-    }
-  },
-  // ── 학사일정 (달력에 표시) ──
-  // { date: 시작일, end: 끝나는 날(하루면 생략), title: 내용, type: '시험' | '휴원' | '보강' | '특강' | '행사', who: '전체' 또는 'M1' 등 }
-  calendar: [
-    { date: '2026-10-29', title: '단원평가 (삼각형의 성질)', type: '시험', who: 'M1' },
-    { date: '2026-11-07', title: '보강 수업', type: '보강', who: 'T1' },
-    { date: '2026-11-19', title: '휴원', type: '휴원', who: '전체' },
-    { date: '2026-11-23', end: '2026-11-28', title: '기말고사 대비 특강', type: '특강', who: '전체' },
-    { date: '2026-12-01', title: '겨울학기 개강', type: '행사', who: '전체' }
-  ],
   materials: [                                        // 모든 반 공통 자료
     { label: 'PDF', title: '2학기 진도 계획표', desc: '차수별 진도와 시험 일정', url: '' }
   ],
@@ -405,7 +358,7 @@ const SITE = {
   // 키는 학기 시작 연-월, 값은 코드의 암호(해시)예요. 코드 원문은 파일에 남지 않아요.
   // 새 코드 만들기: 사이트 주소 끝에 #code 를 붙여 열고, 코드를 입력하면 붙여 넣을 한 줄이 나와요.
   access: {
-    '2026-09': '6318105180af422fb1925e7d347e5ddb6c474b184655ad6a6fbb465fe76b092e',   // 2026년 9~11월
+    '2026-09': '6d3ea9f5db3f23912d7656ffde04555c22241cee44fb6678de40dfe5626f0f33',   // 2026년 9~11월
     '2026-12': '2986b7bb6323901291dc4618c0ebaf5afa5c0e5c8f8c5c10453d6e1524f68f5e'    // 2026년 12월 ~ 2027년 2월
   },
   footer: '© 2026 38인의 수학생각 송인준. All rights reserved.\n' +
@@ -555,19 +508,18 @@ function sideItem(c, activeId, last) {
     (isNew(c) ? '<span class="cnew" aria-label="새 강의"></span>' : '') + '</a>';
 }
 function shell(activeId, mainHtml) {
+  destroyPlayer();
   const k = termKey(), last = lastSeen();
   root.innerHTML = '<div class="app"><aside class="side">' +
-    '<a class="brand side-brand" href="#" data-home><span><b>38인의 수학생각</b><small>송인준 선생님 LMS</small></span></a>' +
+    '<a class="brand side-brand" href="#" data-home><span><b>송인준 선생님 LMS</b><small>@38인의 수학생각</small></span></a>' +
     '<nav class="clist" aria-label="반 목록">' +
     '<div class="ssec"><div class="sh">강의영상</div>' +
     '<div class="grp">' + CLASSES.map(c => sideItem(c, activeId, last)).join('') + '</div></div>' +
-    (libList().length ? '<span class="sdiv" aria-hidden="true"></span><div class="ssec lib"><div class="sh">학습자료</div><div class="grp">' + libList().map(g => '<a class="citem' + ('lib-' + g.key === activeId ? ' on' : '') + '" href="#lib-' + g.key + '"><span class="code">' + libIcon(g) + '</span><span class="ctext"><b>' + esc(g.name) + '</b></span></a>').join('') + '</div></div>' : '') +
-    '<span class="sdiv" aria-hidden="true"></span><div class="ssec lib"><div class="sh">학사일정</div><div class="grp"><a class="citem' + (activeId === 'calendar' ? ' on' : '') + '" href="#calendar"><span class="code"><svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><rect x="3" y="4.5" width="14" height="12.5" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M3 8.5h14M7 3v3M13 3v3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span><span class="ctext"><b>달력 보기</b></span></a></div></div>' +
     '</nav>' +
     (activeId && (SITE.notices || []).length ? '<div class="snote"><p class="t">안내</p>' + SITE.notices.map(n => '<p>' + esc(n.text) + '</p>').join('') + '</div>' : '') +
     '</aside><main class="main" id="app"><div class="inner">' + mainHtml +
     '<div class="foot">' + esc(SITE.footer) + '</div></div></main></div>';
-  if (activeId && !activeId.startsWith('lib-') && activeId !== 'calendar') { try { localStorage.setItem('review:last', activeId); } catch (e) {} }
+  if (activeId) { try { localStorage.setItem('review:last', activeId); } catch (e) {} }
   root.querySelectorAll('[data-home]').forEach(el => el.addEventListener('click', e => { e.preventDefault(); qFilter = ''; go(''); history.replaceState(null, '', location.pathname + location.search); route(); }));
 }
 
@@ -576,7 +528,7 @@ function viewGate(mode) {
   const k = termKey(), admin = mode === 'admin';
   document.title = '38인의 수학생각 LMS';
   root.innerHTML = '<div class="gate"><div class="gcard">' +
-    '<div class="brand"><span class="logo">38</span><span><b>38인의 수학생각</b><small>송인준 선생님 LMS</small></span></div>' +
+    '<div class="brand"><span class="logo">38</span><span><b>송인준 선생님 LMS</b><small>@38인의 수학생각</small></span></div>' +
     '<h1>' + (admin ? '입장 코드 만들기' : '입장 코드를 입력해 주세요') + '</h1>' +
     '<p class="sub">' + (admin ? '학기를 고르고 새 코드를 입력하면 파일에 붙여 넣을 한 줄이 나와요.' : esc(termName(k)) + ' 재원생 전용 강의실이에요.') + '</p>' +
     '<form id="gateF" autocomplete="off">' +
@@ -605,10 +557,7 @@ let curNo = null, qFilter = '';
 function route() {
   if (location.hash === '#code') { viewGate('admin'); return; }
   if (!unlocked()) { viewGate(); return; }
-  const cm = location.hash.match(/^#calendar(?:-(\d{4})-(\d{2}))?$/);
-  if (cm) { curNo = null; viewCalendar(cm[1] ? +cm[1] : null, cm[2] ? +cm[2] : null); return; }
-  const lm = location.hash.match(/^#lib-(\w+)$/);
-  if (lm && SITE.library && SITE.library[lm[1]]) { curNo = null; viewLibrary(lm[1]); return; }
+  if (!dataReady) { shell('', '<div class="emptymsg">불러오는 중…</div>'); return; }
   const r = parseHash(), c = CLASSES.find(x => x.id === r.cid);
   if (!c) { curNo = null; viewHome(); return; }
   viewClass(c, r.no);
@@ -628,74 +577,8 @@ function viewHome() {
   const q = String(todayQuote()).split('*').filter(x => x.trim());
   shell('', '<section class="hello">' +
     '<h1 class="big">' + esc(q.map(x => x.trim()).join(' ')) + '</h1></section>' +
-    noticeBoard() + libraryCards() + calendarCard() +
+    noticeBoard() +
     '');
-  window.scrollTo(0, 0);
-}
-
-/* ---------- 학습자료 ---------- */
-const LIB_ICON = { middle: '<svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M10 5.5C8.5 4.3 6.3 4 3 4v11c3.3 0 5.5.3 7 1.5 1.5-1.2 3.7-1.5 7-1.5V4c-3.3 0-5.5.3-7 1.5z"/><path d="M10 5.5v11"/></svg>', high: '<svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M10 5.5C8.5 4.3 6.3 4 3 4v11c3.3 0 5.5.3 7 1.5 1.5-1.2 3.7-1.5 7-1.5V4c-3.3 0-5.5.3-7 1.5z"/><path d="M10 5.5v11"/></svg>' };
-const libIcon = g => LIB_ICON[g.key] || esc(g.name.slice(0, 1));
-function libList() { return Object.keys(SITE.library || {}).map(k => Object.assign({ key: k }, SITE.library[k])); }
-function libraryCards() {
-  const L = libList(); if (!L.length) return '';
-  return '<section aria-labelledby="lh"><h2 class="bh" id="lh">학습자료</h2><div class="lcards">' + L.map(g => {
-    const n = (g.items || []).length, last = (g.items || []).map(i => i.date).filter(Boolean).sort().pop();
-    return '<a class="lcard" href="#lib-' + g.key + '"><span class="code">' + libIcon(g) + '</span>' +
-      '<span class="lt"><b>' + esc(g.name) + '</b><small>' + esc(g.desc || '') + '</small><em>자료 ' + n + '개' + (last ? ' · 최근 ' + esc(fmtDate(last)) : '') + '</em></span><span class="chev" aria-hidden="true"></span></a>';
-  }).join('') + '</div></section>';
-}
-let libGrade = '';
-function viewLibrary(key) {
-  const g = SITE.library[key], items = (g.items || []).slice().sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')));
-  const grades = [...new Set(items.map(i => i.grade).filter(Boolean))].sort();
-  if (libGrade && !grades.includes(libGrade)) libGrade = '';
-  document.title = g.name + ' 학습자료 · 38인의 수학생각 LMS';
-  const shown = items.filter(i => !libGrade || i.grade === libGrade);
-  shell('lib-' + key, '<div class="crumb"><b>학습자료</b></div><h1 class="ttl">' + esc(g.name) + '</h1><p class="sub">' + esc(g.desc || '') + '</p>' +
-    (grades.length > 1 ? '<div class="gchips" role="group" aria-label="학년">' + ['', ...grades].map(x => '<button class="gchip' + (x === libGrade ? ' on' : '') + '" data-grade="' + esc(x) + '" aria-pressed="' + (x === libGrade) + '">' + (x ? esc(x) : '전체') + '</button>').join('') + '</div>' : '') +
-    '<div class="h2"><h2>자료 목록</h2><span class="meta">' + shown.length + '개</span></div>' +
-    (shown.length ? '<div class="lecs">' + shown.map(i => (i.url ? '<a class="res" href="' + esc(i.url) + '" target="_blank" rel="noopener">' : '<div class="res">') +
-      '<span><b>' + esc(i.title) + '</b><small>' + esc([i.grade, i.tag, i.date ? fmtDate(i.date) : ''].filter(Boolean).join(' · ')) + '</small></span><span class="go">' + (i.url ? '열기 ↗' : '준비 중') + '</span>' + (i.url ? '</a>' : '</div>')).join('') + '</div>'
-      : '<div class="emptymsg">아직 올라온 자료가 없어요.</div>'));
-  $('#app').querySelectorAll('[data-grade]').forEach(b => b.addEventListener('click', () => { libGrade = b.dataset.grade; viewLibrary(key); }));
-  window.scrollTo(0, 0);
-}
-
-/* ---------- 학사일정 ---------- */
-const TYPE_CLS = { '시험': 't-exam', '휴원': 't-off', '보강': 't-make', '특강': 't-spec', '행사': 't-evt' };
-const ds = d => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
-function evOn(day) { return (SITE.calendar || []).filter(e => e.date <= day && (e.end || e.date) >= day); }
-function evRange(e) { const a = new Date(e.date + 'T00:00'), b = e.end ? new Date(e.end + 'T00:00') : null; return (a.getMonth() + 1) + '/' + a.getDate() + ' (' + WD[a.getDay()] + ')' + (b ? ' ~ ' + (b.getMonth() + 1) + '/' + b.getDate() + ' (' + WD[b.getDay()] + ')' : ''); }
-function evRow(e) { return '<div class="ev"><span class="evd">' + esc(evRange(e)) + '</span><span class="evt"><span class="tp ' + (TYPE_CLS[e.type] || '') + '">' + esc(e.type || '일정') + '</span>' + esc(e.title) + (e.who && e.who !== '전체' ? ' <small>' + esc(e.who) + '</small>' : '') + '</span></div>'; }
-function calendarCard() {
-  const today = ds(new Date()), up = (SITE.calendar || []).filter(e => (e.end || e.date) >= today).sort((a, b) => a.date.localeCompare(b.date)).slice(0, 3);
-  return '<section aria-labelledby="ch"><div class="bhrow"><h2 class="bh" id="ch">학사일정</h2><a class="more" href="#calendar">달력 보기</a></div>' +
-    '<a class="calcard" href="#calendar">' + (up.length ? up.map(evRow).join('') : '<div class="emptymsg" style="padding:6px 0">다가오는 일정이 없어요.</div>') + '</a></section>';
-}
-function viewCalendar(y, m) {
-  const now = new Date(); if (!y) { y = now.getFullYear(); m = now.getMonth() + 1; }
-  const first = new Date(y, m - 1, 1), startDow = first.getDay(), days = new Date(y, m, 0).getDate(), today = ds(now);
-  const prev = new Date(y, m - 2, 1), next = new Date(y, m, 1);
-  const key = d => '#calendar-' + d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
-  document.title = y + '년 ' + m + '월 학사일정 · 38인의 수학생각 LMS';
-  let cells = '';
-  for (let i = 0; i < startDow; i++) cells += '<div class="cd out"></div>';
-  for (let d = 1; d <= days; d++) {
-    const dt = new Date(y, m - 1, d), k = ds(dt), E = evOn(k);
-    cells += '<div class="cd' + (k === today ? ' today' : '') + (dt.getDay() === 0 ? ' sun' : dt.getDay() === 6 ? ' sat' : '') + (E.length ? ' has' : '') + '"><span class="dn">' + d + '</span>' +
-      E.map(e => '<span class="ce ' + (TYPE_CLS[e.type] || '') + '" title="' + esc(e.title) + '">' + esc(e.title) + '</span>').join('') +
-      (E.length ? '<span class="cdots">' + E.map(e => '<i class="' + (TYPE_CLS[e.type] || '') + '"></i>').join('') + '</span>' : '') + '</div>';
-  }
-  const tail = (7 - (startDow + days) % 7) % 7; for (let i = 0; i < tail; i++) cells += '<div class="cd out"></div>';
-  const mStart = ds(first), mEnd = ds(new Date(y, m - 1, days));
-  const list = (SITE.calendar || []).filter(e => e.date <= mEnd && (e.end || e.date) >= mStart).sort((a, b) => a.date.localeCompare(b.date));
-  shell('calendar', '<div class="crumb"><b>학사일정</b></div>' +
-    '<div class="calhead"><h1 class="ttl">' + y + '년 ' + m + '월</h1><div class="calnav"><a class="btn" href="' + key(prev) + '" aria-label="이전 달">‹</a><a class="btn" href="#calendar">오늘</a><a class="btn" href="' + key(next) + '" aria-label="다음 달">›</a></div></div>' +
-    '<div class="cal"><div class="cw">' + WD.map((w, i) => '<span class="' + (i === 0 ? 'sun' : i === 6 ? 'sat' : '') + '">' + w + '</span>').join('') + '</div><div class="cg">' + cells + '</div></div>' +
-    '<div class="legend">' + Object.keys(TYPE_CLS).map(t => '<span><i class="' + TYPE_CLS[t] + '"></i>' + t + '</span>').join('') + '</div>' +
-    '<div class="h2"><h2>' + m + '월 일정</h2><span class="meta">' + list.length + '개</span></div>' +
-    (list.length ? '<div class="evlist">' + list.map(evRow).join('') + '</div>' : '<div class="emptymsg">이번 달 일정이 없어요.</div>'));
   window.scrollTo(0, 0);
 }
 
@@ -715,7 +598,7 @@ function viewClass(c, no) {
     const id = ytId(lec.video), dn = store.get(c.id, lec.no);
     h += '<h1 class="ttl">' + lec.no + '차 ' + esc(lec.title) + '</h1>' +
       '<p class="sub">' + [fmtDateLong(lec.date), lec.unit, lec.duration].filter(Boolean).map(esc).join(' · ') + '</p>' +
-      '<div class="player" id="playerBox">' + (id ? playerFrame(id, 0, false) : '<div class="empty"><div><b>영상 준비 중</b>수업이 끝나면 곧 올라와요.</div></div>') + '</div>' +
+      '<div class="player" id="playerBox" tabindex="-1">' + (id ? playerShell() : '<div class="empty"><div><b>영상 준비 중</b>수업이 끝나면 곧 올라와요.</div></div>') + '</div>' +
       '<div class="acts">' + (id ? '<button class="btn ' + (dn ? 'ok' : 'pri') + '" id="doneBtn" aria-pressed="' + dn + '">' + (dn ? '✓ 복습 완료' : '다 들었어요') + '</button>' : '') +
       prevNext(L, lec) + '<span class="sp"></span><span class="copied" id="copied"></span><button class="btn" id="shareBtn">링크 복사</button></div>';
     const flow = lec.flow || [], quiz = lec.quiz || [];
@@ -735,9 +618,108 @@ function viewClass(c, no) {
   bindClass(c, lec);
   if (prevCid !== c.id || no == null) window.scrollTo(0, 0);
 }
-function playerFrame(id, start, auto) {
-  const q = 'rel=0&modestbranding=1&playsinline=1&iv_load_policy=3' + (start ? '&start=' + start : '') + (auto ? '&autoplay=1' : '');
-  return '<iframe src="https://www.youtube-nocookie.com/embed/' + id + '?' + q + '" title="강의 영상" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>';
+/* ---------- 영상 플레이어 ----------
+   유튜브 화면 위를 덮개로 막아서 제목·로고·추천 영상 등을 눌러 유튜브로 나갈 수 없게 하고,
+   재생·탐색·배속·소리·전체화면 버튼은 사이트가 직접 그려요. */
+const IC = {
+  play: '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg>',
+  pause: '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" fill="currentColor"/></svg>',
+  vol: '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>',
+  mute: '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor"/><path d="m16 9.5 5 5m0-5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>',
+  full: '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
+  back: '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M11.5 7.5 7 12l4.5 4.5M17 7.5 12.5 12l4.5 4.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  fwd: '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="m12.5 7.5 4.5 4.5-4.5 4.5M7 7.5l4.5 4.5L7 16.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+};
+const SPEEDS = [1, 1.25, 1.5, 1.75, 2, 0.75];
+let YTP = null, ytTimer = null, ytStarted = false, ytSpeed = 1, hideT = null;
+function playerShell() {
+  return '<div id="ytp"></div>' +
+    '<div class="pblock top" aria-hidden="true"></div><div class="pblock bot" aria-hidden="true"></div>' +
+    '<div class="pshade" aria-hidden="true"></div>' +
+    '<button class="pov" id="pov" hidden aria-label="재생"><span class="pbig">' + IC.play + '</span></button>' +
+    '<div class="pend" id="pend" hidden><b>강의를 끝까지 봤어요</b><span>수고했어요! 아래 ‘다 들었어요’를 눌러 표시해 주세요.</span><button class="btn" id="preplay">처음부터 다시 보기</button></div>' +
+    '<div class="pctl" id="pctl" hidden>' +
+      '<input type="range" class="pseek" id="pseek" min="0" max="1000" value="0" step="1" aria-label="재생 위치">' +
+      '<div class="prow"><button class="pb" id="pplay" aria-label="재생">' + IC.play + '</button>' +
+      '<button class="pb" id="pback" aria-label="10초 뒤로">' + IC.back + '</button><button class="pb" id="pfwd" aria-label="10초 앞으로">' + IC.fwd + '</button>' +
+      '<span class="ptime" id="ptime">0:00 / 0:00</span><span class="sp"></span>' +
+      '<button class="pb pspd" id="pspd" aria-label="재생 속도">1x</button><button class="pb" id="pmute" aria-label="소리 끄기">' + IC.vol + '</button>' +
+      '<button class="pb" id="pfull" aria-label="전체 화면">' + IC.full + '</button></div></div>';
+}
+function loadYT() {
+  if (window.YT && window.YT.Player) return Promise.resolve();
+  return new Promise(res => {
+    const prev = window.onYouTubeIframeAPIReady; window.onYouTubeIframeAPIReady = () => { if (prev) prev(); res(); };
+    if (!document.getElementById('ytapi')) { const t = document.createElement('script'); t.id = 'ytapi'; t.src = 'https://www.youtube.com/iframe_api'; document.head.appendChild(t); }
+  });
+}
+const fmtT = x => { x = Math.max(0, Math.floor(x || 0)); const h = Math.floor(x / 3600), m = Math.floor(x % 3600 / 60), s2 = String(x % 60).padStart(2, '0'); return h ? h + ':' + String(m).padStart(2, '0') + ':' + s2 : m + ':' + s2; };
+function destroyPlayer() { clearInterval(ytTimer); ytTimer = null; try { if (YTP && YTP.destroy) YTP.destroy(); } catch (e) {} YTP = null; ytStarted = false; }
+function mountPlayer(id) {
+  destroyPlayer();
+  const box = $('#playerBox'); if (!box || !$('#ytp')) return;
+  const pov = $('#pov'), pctl = $('#pctl'), pend = $('#pend'), seek = $('#pseek'), ptime = $('#ptime'), pplay = $('#pplay');
+  let dragging = false;
+  const showCtl = () => { box.classList.add('ui'); clearTimeout(hideT); hideT = setTimeout(() => { if (YTP && YTP.getPlayerState && YTP.getPlayerState() === 1) box.classList.remove('ui'); }, 2600); };
+  const tick = () => { if (!YTP || !YTP.getDuration) return; const d = YTP.getDuration() || 0, t = YTP.getCurrentTime() || 0; if (!dragging && d) seek.value = Math.round(t / d * 1000); ptime.textContent = fmtT(t) + ' / ' + fmtT(d); };
+  const setPlaying = on => { pplay.innerHTML = on ? IC.pause : IC.play; pplay.setAttribute('aria-label', on ? '일시정지' : '재생'); box.classList.toggle('paused', !on); pov.hidden = on; };
+  loadYT().then(() => {
+    if (!document.body.contains(box)) return;
+    const pv = { controls: 0, rel: 0, modestbranding: 1, playsinline: 1, iv_load_policy: 3, disablekb: 1, fs: 0, enablejsapi: 1 };
+    if (location.origin && location.origin !== 'null') pv.origin = location.origin;
+    YTP = new YT.Player('ytp', {
+      host: 'https://www.youtube-nocookie.com', videoId: id, playerVars: pv,
+      events: {
+        onReady: () => { tick(); box.classList.add('ready'); },
+        onStateChange: e => {
+          const st = e.data;
+          if (st === 1) {
+            if (!ytStarted) { ytStarted = true; box.classList.add('started'); pctl.hidden = false; }
+            pend.hidden = true; setPlaying(true); showCtl();
+            clearInterval(ytTimer); ytTimer = setInterval(tick, 250);
+            try { YTP.setPlaybackRate(ytSpeed); } catch (er) {}
+          } else if (st === 2) { if (ytStarted) { setPlaying(false); box.classList.add('ui'); tick(); } }
+          else if (st === 0) { setPlaying(false); clearInterval(ytTimer); pov.hidden = true; pend.hidden = false; box.classList.add('ui'); }
+        }
+      }
+    });
+  });
+  const toggle = () => { if (!YTP || !YTP.getPlayerState) return; YTP.getPlayerState() === 1 ? YTP.pauseVideo() : YTP.playVideo(); };
+  pov.addEventListener('click', e => { e.stopPropagation(); toggle(); });
+  box.addEventListener('click', e => {
+    if (!ytStarted || e.target.closest('.pctl,.pend,.pov')) return;
+    if (matchMedia('(hover: none)').matches && !box.classList.contains('ui')) { showCtl(); return; }
+    toggle();
+  });
+  box.addEventListener('mousemove', () => { if (ytStarted) showCtl(); });
+  box.addEventListener('contextmenu', e => e.preventDefault());
+  pplay.addEventListener('click', toggle);
+  $('#pback').addEventListener('click', () => { if (YTP) { YTP.seekTo(Math.max(0, YTP.getCurrentTime() - 10), true); tick(); showCtl(); } });
+  $('#pfwd').addEventListener('click', () => { if (YTP) { YTP.seekTo(YTP.getCurrentTime() + 10, true); tick(); showCtl(); } });
+  seek.addEventListener('input', () => { dragging = true; const d = YTP && YTP.getDuration ? YTP.getDuration() : 0; ptime.textContent = fmtT(seek.value / 1000 * d) + ' / ' + fmtT(d); showCtl(); });
+  seek.addEventListener('change', () => { dragging = false; const d = YTP && YTP.getDuration ? YTP.getDuration() : 0; if (d) YTP.seekTo(seek.value / 1000 * d, true); });
+  const spd = $('#pspd'); spd.textContent = ytSpeed + 'x';
+  spd.addEventListener('click', () => { ytSpeed = SPEEDS[(SPEEDS.indexOf(ytSpeed) + 1) % SPEEDS.length]; spd.textContent = ytSpeed + 'x'; try { YTP.setPlaybackRate(ytSpeed); } catch (er) {} showCtl(); });
+  $('#pmute').addEventListener('click', e => { if (!YTP) return; const m = YTP.isMuted(); m ? YTP.unMute() : YTP.mute(); e.currentTarget.innerHTML = m ? IC.vol : IC.mute; showCtl(); });
+  $('#pfull').addEventListener('click', () => {
+    const fs = document.fullscreenElement || document.webkitFullscreenElement;
+    if (fs) { (document.exitFullscreen || document.webkitExitFullscreen).call(document); return; }
+    if (box.classList.contains('pfull')) { box.classList.remove('pfull'); return; }
+    if (box.requestFullscreen) box.requestFullscreen().catch(() => box.classList.add('pfull'));
+    else if (box.webkitRequestFullscreen) box.webkitRequestFullscreen();
+    else box.classList.add('pfull');
+  });
+  $('#preplay').addEventListener('click', () => { if (YTP) { YTP.seekTo(0, true); YTP.playVideo(); } });
+  box.addEventListener('keydown', e => {
+    if (e.target.closest('input')) return;
+    if (e.key === ' ' || e.key === 'k') { e.preventDefault(); toggle(); }
+    else if (e.key === 'ArrowLeft') $('#pback').click(); else if (e.key === 'ArrowRight') $('#pfwd').click();
+  });
+}
+function seekTo(sec) {
+  if (!YTP || !YTP.seekTo) return;
+  YTP.seekTo(sec, true); YTP.playVideo();
+  $('#playerBox').scrollIntoView({ block: 'center', behavior: 'smooth' });
 }
 function prevNext(L, lec) {
   const i = L.findIndex(l => l.no === lec.no), p = L[i - 1], n = L[i + 1];
@@ -766,11 +748,18 @@ function bindClass(c, lec) {
   bindNo(app, c);
   if (!lec) return;
   app.querySelectorAll('[data-seek]').forEach(b => b.addEventListener('click', () => {
-    const id = ytId(lec.video); if (!id) return; $('#playerBox').innerHTML = playerFrame(id, +b.dataset.seek, true);
-    $('#playerBox').scrollIntoView({ block: 'center', behavior: 'smooth' });
+    seekTo(+b.dataset.seek);
   }));
   app.querySelectorAll('.qa').forEach(b => b.addEventListener('click', () => b.classList.toggle('open')));
-  const db = $('#doneBtn'); if (db) db.addEventListener('click', () => { const y = window.scrollY; store.set(c.id, lec.no, !store.get(c.id, lec.no)); viewClass(c, lec.no); window.scrollTo(0, y); });
+  const db = $('#doneBtn');
+  const markDone = v => {
+    store.set(c.id, lec.no, v); if (!db) return;
+    db.className = 'btn ' + (v ? 'ok' : 'pri'); db.textContent = v ? '✓ 복습 완료' : '다 들었어요'; db.setAttribute('aria-pressed', v);
+    const s2 = stats(c), mt = $('.h2 .meta'); if (mt) mt.textContent = '복습 ' + s2.done.length + '/' + s2.R.length;
+    const box = $('#lectureList'); if (box) { box.innerHTML = listHtml(c, lec); bindNo(box, c); }
+  };
+  if (db) db.addEventListener('click', () => markDone(!store.get(c.id, lec.no)));
+  const vid = ytId(lec.video); if (vid) mountPlayer(vid); else destroyPlayer();
   const sb = $('#shareBtn'); if (sb) sb.addEventListener('click', () => {
     const url = location.href.split('#')[0] + '#' + c.id + '-' + lec.no, done = () => { const x = $('#copied'); x.textContent = '복사했어요'; setTimeout(() => { const y = $('#copied'); if (y) y.textContent = ''; }, 1800); };
     if (navigator.clipboard) navigator.clipboard.writeText(url).then(done, () => { $('#copied').textContent = url; }); else $('#copied').textContent = url;
@@ -778,7 +767,58 @@ function bindClass(c, lec) {
   const se = $('#search'); if (se) se.addEventListener('input', () => { qFilter = se.value; const box = $('#lectureList'); box.innerHTML = listHtml(c, lec); bindNo(box, c); });
 }
 
-route();
+/* ---------- 구글 시트에서 내용 불러오기 ---------- */
+const DATA_KEY = 'review:data';
+const col = (r, ...names) => { for (const n of names) if (r[n] != null && String(r[n]).trim() !== '') return String(r[n]).trim(); return ''; };
+const lines = v => String(v || '').split(/\r?\n/).map(x => x.trim()).filter(Boolean);
+function normDur(v) { const m = String(v).match(/^(\d+):(\d{2}):00$/); return m ? m[1] + ':' + m[2] : v; }
+function applyData(D) {
+  if (!D || typeof D !== 'object') return false;
+  const rows = n => Array.isArray(D[n]) ? D[n] : [];
+  if (rows('반').length) {
+    const cls = rows('반').map(r => ({ id: col(r, '반ID', 'ID').toLowerCase(), name: col(r, '반이름', '이름'), sub: '', days: col(r, '요일'), time: col(r, '시간', '부'), notices: [], materials: [], lectures: [] })).filter(c => c.id && c.name);
+    rows('강의영상').forEach(r => {
+      const c = cls.find(x => x.id === col(r, '반ID').toLowerCase()); const no = parseInt(col(r, '차수'), 10); if (!c || !no) return;
+      c.lectures.push({ no, unit: col(r, '단원'), title: col(r, '제목'), date: col(r, '날짜'), video: col(r, '유튜브', '영상'), duration: normDur(col(r, '길이')),
+        flow: lines(col(r, '구간')).map(x => { const m = x.match(/^(\d{1,2}(?::\d{2}){1,2})\s+(.+)$/); return m ? { t: m[1], label: m[2] } : null; }).filter(Boolean),
+        quiz: lines(col(r, '확인문제')).map(x => { const i = x.indexOf('|'); return i > 0 ? { q: x.slice(0, i).trim(), a: x.slice(i + 1).trim() } : null; }).filter(Boolean) });
+    });
+    rows('반별자료').forEach(r => {
+      const m = { label: col(r, '종류'), title: col(r, '제목'), desc: col(r, '설명'), url: col(r, '링크') }; if (!m.title) return;
+      const who = col(r, '반ID').toLowerCase();
+      if (who && who !== '전체') { const c = cls.find(x => x.id === who); if (c) c.materials.push(m); }
+    });
+    CLASSES.length = 0; cls.forEach(c => CLASSES.push(c));
+  }
+  if (rows('반별자료').length) { const common = rows('반별자료').filter(r => { const w = col(r, '반ID'); return !w || w === '전체'; }).map(r => ({ label: col(r, '종류'), title: col(r, '제목'), desc: col(r, '설명'), url: col(r, '링크') })).filter(m => m.title); SITE.materials = common; }
+  if (rows('공지').length) {
+    const N = rows('공지'), of = g => N.filter(r => col(r, '구분') === g);
+    if (of('업로드').length) SITE.upload = col(of('업로드')[0], '내용');
+    if (of('활용방법').length) SITE.howto = of('활용방법').map(r => col(r, '내용')).filter(Boolean);
+    if (of('안내').length) SITE.notices = of('안내').map(r => ({ label: col(r, '표시') || '안내', text: col(r, '내용') })).filter(n => n.text);
+    of('반공지').forEach(r => { const c = CLASSES.find(x => x.id === col(r, '대상').toLowerCase()); if (c && col(r, '내용')) c.notices.push({ label: col(r, '표시'), text: col(r, '내용') }); });
+  }
+  if (rows('오늘의 문장').length) { const q = rows('오늘의 문장').map(r => col(r, '문장')).filter(Boolean); if (q.length) SITE.quotes = q; }
+  return true;
+}
+let dataReady = !SITE.dataUrl;
+function boot() {
+  if (!SITE.dataUrl) { route(); return; }
+  let cached = null; try { cached = localStorage.getItem(DATA_KEY); } catch (e) {}
+  const BASE = JSON.stringify({ SITE, CLASSES });
+  const reset = () => { const b = JSON.parse(BASE); Object.assign(SITE, b.SITE); CLASSES.length = 0; b.CLASSES.forEach(c => CLASSES.push(c)); };
+  if (cached) { try { applyData(JSON.parse(cached)); dataReady = true; } catch (e) {} }
+  route();
+  fetch(SITE.dataUrl, { cache: 'no-store' }).then(r => r.json()).then(D => {
+    const txt = JSON.stringify(D);
+    if (txt === cached) return;
+    reset(); applyData(D); dataReady = true;
+    try { localStorage.setItem(DATA_KEY, txt); } catch (e) {}
+    if (!ytStarted || !cached) route();
+  }).catch(() => { if (!dataReady) { dataReady = true; route(); } });
+}
+
+boot();
 </script>
 </body>
 </html>
