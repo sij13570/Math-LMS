@@ -1176,8 +1176,9 @@ function applyData(D) {
     SITE.upload = of('업로드').length ? col(of('업로드')[0], '내용') : '';
     SITE.howto = of('활용방법').map(r => col(r, '내용')).filter(Boolean);
     SITE.notices = of('안내').map(r => ({ label: col(r, '표시') || '안내', text: col(r, '내용') })).filter(n => n.text);
-    SITE.pinned = of('필독').map(r => ({ date: col(r, '표시'), text: col(r, '내용'), detail: col(r, '상세'), image: col(r, '이미지', '그림') })).filter(n => n.text);
-    SITE.board = of('공지').map(r => ({ date: col(r, '표시'), text: col(r, '내용'), detail: col(r, '상세'), image: col(r, '이미지', '그림') })).filter(n => n.text);
+    const imgsOf = r => Object.keys(r).filter(k => /^(이미지|그림)\s*\d*$/.test(k.trim())).sort((a, b) => (parseInt(a.replace(/\D/g, ''), 10) || 1) - (parseInt(b.replace(/\D/g, ''), 10) || 1)).map(k => String(r[k] || '').trim()).filter(Boolean).join('\n');
+    SITE.pinned = of('필독').map(r => ({ date: col(r, '표시'), text: col(r, '내용'), detail: col(r, '상세'), image: imgsOf(r) })).filter(n => n.text);
+    SITE.board = of('공지').map(r => ({ date: col(r, '표시'), text: col(r, '내용'), detail: col(r, '상세'), image: imgsOf(r) })).filter(n => n.text);
     of('배너').forEach(r => { const k = { '제목': 'title', '설명': 'desc', '태그': 'tag' }[col(r, '표시')]; if (k && col(r, '내용')) SITE.banner[k] = col(r, '내용'); });
     of('반공지').forEach(r => { const c = CLASSES.find(x => x.id === col(r, '대상').toLowerCase()); if (c && col(r, '내용')) c.notices.push({ label: col(r, '표시'), text: col(r, '내용') }); });
   }
