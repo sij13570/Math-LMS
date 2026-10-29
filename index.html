@@ -411,8 +411,8 @@ body{background:#fff}
 /* 탭: 공지사항 · 강의실 */
 .sech h2 a:hover{text-decoration:underline;text-underline-offset:4px}
 .more{font-size:13px;color:var(--mu);font-weight:700}.more:hover{color:var(--ink)}
-.bq{font-family:"East Sea Dokdo",var(--f-body);font-weight:400;font-size:36px;line-height:1.2;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-top:22px;border-top:1px solid rgba(255,255,255,.12)}
-.ban .banw{grid-template-columns:1fr;gap:26px}
+.bq{font-family:"East Sea Dokdo",var(--f-body);font-weight:400;font-size:40px;line-height:1.25;color:#fff;word-break:keep-all}
+.bq small{display:block;font-family:var(--f-body);font-size:13px;color:#A1A1AA;margin-top:14px}
 a.nr:hover{background:var(--side)}
 .gnav a{font-size:15.5px}
 .gnew{top:20px;right:2px}
@@ -442,7 +442,7 @@ a.nr:hover{background:var(--side)}
 .cchip.on b{background:#fff;color:var(--black)}
 .gnew2{width:6px;height:6px;border-radius:50%;background:#E8382F}
 @media (max-width:860px){
-  .bq{font-size:27px;white-space:normal;padding-top:18px;word-break:keep-all}
+  .bq{font-size:30px}
   .bdesc br{display:none}
   .phw{padding:28px 18px 24px}.phead h1{font-size:26px}
   .nhead{padding:14px 4px;gap:10px;font-size:15px}
@@ -821,8 +821,9 @@ function recentGrid() {
 }
 function bannerTitle(t) { return esc(t).replace(/,\s*/, ',<br>').replace(/\*([^*]+)\*/g, '<em>$1</em>'); }
 function noticeItems() {
-  const pins = [].concat(SITE.upload ? [{ text: SITE.upload, pin: true }] : [], (SITE.notices || []).filter(n => n.text !== SITE.upload).map(n => ({ text: n.text, pin: true })));
-  return pins.concat((SITE.pinned || []).map(n => ({ text: n.text, date: n.date, detail: n.detail, pin: true })), (SITE.board || []).map(n => ({ text: n.text, date: n.date, detail: n.detail })));
+  // 필독(구분 '필독')이 맨 위, 그다음 업로드·안내, 그다음 일반 공지
+  const basic = [].concat(SITE.upload ? [{ text: SITE.upload }] : [], (SITE.notices || []).filter(n => n.text !== SITE.upload).map(n => ({ text: n.text })));
+  return (SITE.pinned || []).map(n => ({ text: n.text, date: n.date, detail: n.detail, pin: true })).concat(basic, (SITE.board || []).map(n => ({ text: n.text, date: n.date, detail: n.detail })));
 }
 function classCards(limitText) {
   return '<div class="ccards">' + CLASSES.map(c => { const s2 = stats(c);
@@ -839,7 +840,7 @@ function viewHome() {
     '<h1>' + bannerTitle(B.title || '') + '</h1>' +
     (B.desc ? '<p class="bdesc">' + esc(B.desc).replace(/\n/g, '<br>') + '</p>' : '') +
     '<div class="bst"><div><b>' + CLASSES.length + '</b><span>운영 반</span></div><div><b>' + lecCount + '</b><span>올라온 강의</span></div><div><b>매일</b><span>당일 업로드</span></div></div></div>' +
-    '<div class="bq">' + esc(String(todayQuote()).replace(/\*/g, '')) + '</div></div></section>';
+    '<div class="bq">“' + esc(String(todayQuote()).replace(/\*/g, '')) + '”<small>오늘의 한마디 · 인준T</small></div></div></section>';
   const cards = '<section aria-labelledby="ch"><div class="sech"><h2 id="ch"><a href="#classes">강의실</a></h2><a class="more" href="#classes">전체 보기 ›</a></div>' + classCards() + '</section>';
   const items = noticeItems();
   const board = '<div class="bd2"><section aria-labelledby="nh"><div class="sech"><h2 id="nh"><a href="#notice">공지사항</a></h2><a class="more" href="#notice">전체 보기 ›</a></div><div class="ntab">' +
