@@ -548,13 +548,10 @@ const SITE = {
   ],
   // 첫 화면 배너 문구와 선생님 소개 (구글 시트 '공지' 탭: 구분 '배너' / '소개'로도 바꿀 수 있어요)
   banner: { tag: '재원생 전용', title: '수업은 교실에서,*복습*은 여기서.', desc: '당일 업로드되는 수업 영상을 광고, 추천 영상 없이\n다시 들으며 학습할 수 있습니다.' },
-  board: [ { date: '10.27', text: 'M1 단원평가(삼각형의 성질) 안내', detail: '10월 29일(목) 수업 시간에 삼각형의 성질 단원평가가 있어요.\n4차 강의까지 꼭 복습하고 오세요.' } ],   // 공지 게시판 (시트 '공지' 탭 구분 '공지', '상세' 칸은 눌렀을 때 펼쳐지는 내용)
+  board: [],   // 공지 게시판 (시트 '공지' 탭 구분 '공지', '상세' 칸은 눌렀을 때 펼쳐지는 내용)
   // ── 자료실 (위쪽 '자료실' 탭). 구글 시트 '자료실' 탭으로 관리해요. ──
   // { cat: 분류, title: 제목, who: '전체' 또는 반ID(a, b, t1, t2), date: 'YYYY-MM-DD', url: 링크(구글 드라이브 공유 링크 등), desc: 설명 }
-  files: [
-    { cat: '학습지', title: '삼각형의 성질 추가 문제', who: 'a', date: '2026-10-26', url: '', desc: '4차 수업 숙제' },
-    { cat: '시험 대비', title: '2학기 기말고사 대비 요약 노트', who: '전체', date: '2026-10-20', url: '', desc: '' }
-  ],
+  files: [],
   // 공지사항: 업로드 일정과 활용 방법
   upload: '모든 반 강의 영상은 당일 수업 종료 후 업로드됩니다.',
   howto: [
@@ -582,7 +579,7 @@ const CLASSES = [
   {
     id: 'a', name: '[M1] 중1 2-1실력A 2-2실력B', sub: '',
     days: '월·수·금', time: '1부',
-    notices: [ { label: '10/29', text: '단원평가(삼각형의 성질) 있어요. 4차까지 꼭 복습해 오세요.' } ],
+    notices: [],
     materials: [ { label: '학습지', title: '삼각형의 성질 추가 문제', desc: '4차 수업 숙제', url: '' } ],
     lectures: [
       { no: 1, unit: 'Ⅰ. 삼각형의 성질', title: '이등변삼각형의 성질', date: '2026-09-02', video: '', duration: '48:20',
@@ -707,7 +704,7 @@ function codeOf(c) { const m = String(c.name).match(/[A-Z]\d/); return m ? m[0] 
 function nameOf(c) { return String(c.name).replace(/^\s*\[[^\]]*\]\s*/, ''); }
 function nwrap(s) { return String(s).split(' ').map(w => '<span class="nw">' + esc(w) + '</span>').join(' '); }
 function plainQuote() { return String(todayQuote()).replace(/,\s*\*/, ', ').replace(/\*/g, ''); }
-function isNew(c) { const s = stats(c); if (!s.recent) return false; const d = (Date.now() - new Date(s.recent + 'T00:00').getTime()) / 864e5; return d >= 0 && d < 2; }
+function isNew(c) { return false; }   // '새 강의' 표시 끔
 
 function todayClass(c) { return String(c.days).includes(WD[new Date().getDay()]); }
 function lastSeen() { try { return localStorage.getItem('review:last') || ''; } catch (e) { return ''; } }
@@ -863,8 +860,7 @@ function viewNotice(open) {
       '<span class="nt">' + esc(n.text) + '</span><span class="nd">' + esc(n.date || '') + '</span>' + (has ? '<span class="chev" aria-hidden="true"></span>' : '') + '</button>' +
       (has ? '<div class="nbody">' + esc(n.detail).replace(/\n/g, '<br>') + '</div>' : '') + '</div>';
   }).join('') + '</div>' : '<div class="emptymsg">등록된 공지가 없어요.</div>';
-  const how = (SITE.howto || []).length ? '<section style="margin-top:44px"><div class="sech"><h2>이용 방법</h2></div><ol class="how2">' + SITE.howto.map(t => '<li>' + esc(t) + '</li>').join('') + '</ol></section>' : '';
-  shell('notice', list + how, pageHead('공지사항', '수업과 강의실 이용에 관한 안내예요.'));
+  shell('notice', list, pageHead('공지사항', '수업과 강의실 이용에 관한 안내예요.'));
   root.querySelectorAll('.nhead[data-n]').forEach(b => b.addEventListener('click', () => { const it = b.closest('.nitem'); it.classList.toggle('open'); b.setAttribute('aria-expanded', it.classList.contains('open')); }));
   const el = open && $('#n' + open); if (el) el.scrollIntoView({ block: 'center' }); else window.scrollTo(0, 0);
 }
@@ -1131,17 +1127,17 @@ function applyData(D) {
     });
     CLASSES.length = 0; cls.forEach(c => CLASSES.push(c));
   }
-  if (rows('공지').length) {
+  if (Array.isArray(D['공지'])) {   // 시트에 '공지' 탭이 있으면 비어 있어도 시트 내용만 써요
     const N = rows('공지'), of = g => N.filter(r => col(r, '구분') === g);
-    if (of('업로드').length) SITE.upload = col(of('업로드')[0], '내용');
-    if (of('활용방법').length) SITE.howto = of('활용방법').map(r => col(r, '내용')).filter(Boolean);
-    if (of('안내').length) SITE.notices = of('안내').map(r => ({ label: col(r, '표시') || '안내', text: col(r, '내용') })).filter(n => n.text);
+    SITE.upload = of('업로드').length ? col(of('업로드')[0], '내용') : '';
+    SITE.howto = of('활용방법').map(r => col(r, '내용')).filter(Boolean);
+    SITE.notices = of('안내').map(r => ({ label: col(r, '표시') || '안내', text: col(r, '내용') })).filter(n => n.text);
     SITE.pinned = of('필독').map(r => ({ date: col(r, '표시'), text: col(r, '내용'), detail: col(r, '상세') })).filter(n => n.text);
-    if (of('공지').length) SITE.board = of('공지').map(r => ({ date: col(r, '표시'), text: col(r, '내용'), detail: col(r, '상세') })).filter(n => n.text);
+    SITE.board = of('공지').map(r => ({ date: col(r, '표시'), text: col(r, '내용'), detail: col(r, '상세') })).filter(n => n.text);
     of('배너').forEach(r => { const k = { '제목': 'title', '설명': 'desc', '태그': 'tag' }[col(r, '표시')]; if (k && col(r, '내용')) SITE.banner[k] = col(r, '내용'); });
     of('반공지').forEach(r => { const c = CLASSES.find(x => x.id === col(r, '대상').toLowerCase()); if (c && col(r, '내용')) c.notices.push({ label: col(r, '표시'), text: col(r, '내용') }); });
   }
-  if (rows('자료실').length) SITE.files = rows('자료실').map(r => ({ cat: col(r, '분류') || '자료', title: col(r, '제목'), who: col(r, '대상') || '전체', date: col(r, '날짜'), url: col(r, '링크'), desc: col(r, '설명') })).filter(f => f.title);
+  if (Array.isArray(D['자료실'])) SITE.files = rows('자료실').map(r => ({ cat: col(r, '분류') || '자료', title: col(r, '제목'), who: col(r, '대상') || '전체', date: col(r, '날짜'), url: col(r, '링크'), desc: col(r, '설명') })).filter(f => f.title);
   if (rows('오늘의 문장').length) { const q = rows('오늘의 문장').map(r => col(r, '문장')).filter(Boolean); if (q.length) SITE.quotes = q; }
   return true;
 }
