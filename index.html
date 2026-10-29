@@ -865,7 +865,7 @@ function viewHome() {
   const cards = '<section aria-labelledby="ch"><div class="sech"><h2 id="ch"><a href="#classes">강의실</a></h2><a class="more" href="#classes">전체 보기 ›</a></div>' + classCards() + '</section>';
   const items = noticeItems();
   const board = '<div class="bd2"><section aria-labelledby="nh"><div class="sech"><h2 id="nh">공지사항</h2><a class="more" href="#notice">전체 보기 ›</a></div><div class="ntab">' +
-    items.slice(0, 5).map(n => '<div class="nr"><span>' + (n.pin ? '<i class="pin">필독</i>' : '') + esc(n.text) + '</span><span class="nd">' + esc(n.date || '') + '</span></div>').join('') + '</div></section>' +
+    items.slice(0, 5).map((n, i) => '<a class="nr" href="#notice-' + (i + 1) + '"><span>' + (n.pin ? '<i class="pin">필독</i>' : '') + esc(n.text) + '</span><span class="nd">' + esc(n.date || '') + '</span></a>').join('') + '</div></section>' +
     ((SITE.howto || []).length ? '<section aria-labelledby="hh"><div class="sech"><h2 id="hh">이용 방법</h2></div><ol class="how2">' + SITE.howto.map(t => '<li>' + esc(t) + '</li>').join('') + '</ol></section>' : '') + '</div>';
   shell('', cards + board, top);
   window.scrollTo(0, 0);
@@ -900,7 +900,7 @@ function viewNoticeDetail(items, id) {
   document.title = n.text + ' · 공지사항 · 인준T LMS';
   const body = '<article class="ndoc"><div class="ndh">' + (n.pin ? '<i class="pin">필독</i>' : '<span class="nno2">공지 ' + id + '</span>') +
     '<h1>' + esc(n.text) + '</h1>' + (n.date ? '<span class="nd">' + esc(n.date) + '</span>' : '') + '</div>' +
-    '<div class="ndb">' + (n.detail ? '<p>' + esc(n.detail).replace(/\n/g, '<br>') + '</p>' : '') + noticeImgs(n) + (!n.detail && !imgUrls(n.image).length ? '<p class="mu2">' + esc(n.text) + '</p>' : '') + '</div>' +
+    (n.detail || imgUrls(n.image).length ? '<div class="ndb">' + (n.detail ? '<p>' + esc(n.detail).replace(/\n/g, '<br>') + '</p>' : '') + noticeImgs(n) + '</div>' : '') +
     '<nav class="npn">' + (prev ? '<a href="#notice-' + (id - 1) + '"><small>이전 글</small>' + esc(prev.text) + '</a>' : '<span></span>') +
     (next ? '<a class="nx" href="#notice-' + (id + 1) + '"><small>다음 글</small>' + esc(next.text) + '</a>' : '<span></span>') + '</nav>' +
     '<a class="btn" href="#notice">목록으로</a></article>';
