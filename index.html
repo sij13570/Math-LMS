@@ -517,7 +517,7 @@ const SITE = {
   // ── 구글 시트 연결 ──
   // 앱스 스크립트 '웹 앱' 주소를 붙여 넣으면, 반·강의영상·공지·오늘의 문장을 시트에서 읽어 와요.
   // 비워 두면 아래에 적힌 내용을 그대로 써요.
-  dataUrl: 'https://script.google.com/macros/s/AKfycbz0H5cjh_B8Nenf0lH-_pNJhfFCS2pBLr0vuO5rHZSC5Uq9tqlikCVuCC3yweY-fnQf/exec',
+  dataUrl: 'https://script.google.com/macros/s/AKfycbzkoi2utxJkBCWNF_XgeFXjE-JcSbsSx_1QOmDjk67CadioLct5q5W85OWJu7jd4rfn/exec',
   term: '2026학년도 2학기',
   eyebrow: '38인의 수학생각 인준T LMS',   // 첫 화면 제목 위 작은 글씨
   title: '복습 강의실',
@@ -841,7 +841,11 @@ function bannerTitle(t) { return esc(t).replace(/,\s*/, ',<br>').replace(/\*([^*
 function noticeItems() {
   // 필독(구분 '필독')이 맨 위, 그다음 업로드·안내, 그다음 일반 공지
   const basic = [].concat(SITE.upload ? [{ text: SITE.upload }] : [], (SITE.notices || []).filter(n => n.text !== SITE.upload).map(n => ({ text: n.text })));
-  return (SITE.pinned || []).map(n => ({ text: n.text, date: n.date, detail: n.detail, image: n.image, pin: true })).concat(basic, (SITE.board || []).map(n => ({ text: n.text, date: n.date, detail: n.detail, image: n.image })));
+  const fix = n => { const d = String(n.detail || '').trim();
+    if (d && /^(https?:\/\/\S+\s*[,\n]?\s*)+$/.test(d) && d.split(/[\s,]+/).filter(Boolean).every(u => /googleusercontent\.com|drive\.google\.com|\.(png|jpe?g|gif|webp)(\?|$)/i.test(u)))
+      return Object.assign({}, n, { detail: '', image: [n.image, d].filter(Boolean).join('\n') });
+    return n; };
+  return [].concat((SITE.pinned || []).map(n => ({ text: n.text, date: n.date, detail: n.detail, image: n.image, pin: true })).concat(basic, (SITE.board || []).map(n => ({ text: n.text, date: n.date, detail: n.detail, image: n.image })))).map(fix);
 }
 function classCards(limitText) {
   return '<div class="ccards">' + CLASSES.map(c => { const s2 = stats(c);
