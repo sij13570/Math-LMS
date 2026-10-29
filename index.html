@@ -500,6 +500,8 @@ a.fr:hover{background:var(--side)}
 .npn a.nx{text-align:right;border-left:1px solid var(--ln)}
 .npn small{font-size:12px;color:var(--mu)}
 .ndoc>.btn{align-self:flex-start;margin-top:22px}
+.gme{color:var(--mu)}.gme b{color:var(--ink);font-weight:800}.gme:hover{color:var(--ink)}
+.gin.nm{letter-spacing:.02em;font-size:20px}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
@@ -746,7 +748,7 @@ function shell(activeId, mainHtml, top) {
       '<a href="#notice" class="' + (activeId === 'notice' ? 'on' : '') + '"' + (activeId === 'notice' ? ' aria-current="page"' : '') + '>공지사항</a>' +
       '<a href="#classes" class="' + (activeId && activeId !== 'notice' && activeId !== 'library' ? 'on' : '') + '"' + (activeId && activeId !== 'notice' && activeId !== 'library' ? ' aria-current="page"' : '') + '>강의실' + (CLASSES.some(isNew) ? '<i class="gnew" aria-label="새 강의"></i>' : '') + '</a>' +
       '<a href="#library" class="' + (activeId === 'library' ? 'on' : '') + '"' + (activeId === 'library' ? ' aria-current="page"' : '') + '>자료실</a></nav>' +
-    '<span class="gterm">' + esc(termName(termKey())) + '</span></div></header>' +
+    '<a class="gterm gme" href="#name" title="이름 바꾸기">' + (myName() ? '<b>' + esc(myName()) + '</b> 님' : esc(termName(termKey()))) + '</a></div></header>' +
     (top || '') +
     '<main class="main" id="app"><div class="inner">' + mainHtml + '</div></main>' +
     '<footer class="gfoot"><div class="inner">' + esc(SITE.footer) + '</div></footer></div>';
@@ -755,6 +757,34 @@ function shell(activeId, mainHtml, top) {
 }
 
 /* ---------- 입장 코드 화면 ---------- */
+/* ---------- 이름 (성 빼고) ---------- */
+let memName = '';
+function myName() { if (memName) return memName; try { return localStorage.getItem('review:name') || ''; } catch (e) { return ''; } }
+function josa(n, a, b) { const c = String(n).charCodeAt(String(n).length - 1); return (c >= 0xAC00 && c <= 0xD7A3 && (c - 0xAC00) % 28) ? a : b; }
+function viewName() {
+  const cur = myName(), back = location.hash === '#name';
+  document.title = '인준T LMS';
+  root.innerHTML = '<div class="gate"><div class="gcard">' +
+    '<div class="brand">' + MARK + '<span><b>인준T LMS</b><small>@38인의 수학생각</small></span></div>' +
+    '<h1>이름을 알려 주세요</h1><p class="sub">성은 빼고 이름만 적어 주세요. <span class="nw">예: 송인준 → <b>인준</b></span></p>' +
+    '<form id="nameF" autocomplete="off"><input id="nmIn" class="gin nm" type="text" maxlength="8" placeholder="이름 (성 제외)" aria-label="이름" value="' + esc(cur) + '">' +
+    '<button class="btn pri" type="button" id="nmBtn">' + (cur ? '저장하기' : '시작하기') + '</button></form>' +
+    '<p class="gmsg" id="nmMsg" role="status"></p>' +
+    '<p class="gnote">이 기기에만 저장돼요. 다른 사람에게는 보이지 않아요.</p></div></div>';
+  const inp = $('#nmIn'), msg = $('#nmMsg');
+  setTimeout(() => inp.focus(), 50);
+  const save = () => {
+    const v = inp.value.trim().replace(/\s+/g, '');
+    if (!v) { msg.className = 'gmsg err'; msg.textContent = '이름을 적어 주세요.'; inp.focus(); return; }
+    if (!/^[가-힣a-zA-Z]{1,8}$/.test(v)) { msg.className = 'gmsg err'; msg.textContent = '한글이나 영어로 8글자까지 적어 주세요.'; inp.select(); return; }
+    memName = v; try { localStorage.setItem('review:name', v); } catch (e) {}
+    if (back) { go(''); history.replaceState(null, '', location.pathname + location.search); }
+    route();
+  };
+  $('#nameF').addEventListener('submit', e => { e.preventDefault(); save(); });
+  $('#nmBtn').addEventListener('click', save);
+  inp.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.isComposing) { e.preventDefault(); save(); } });
+}
 function viewGate(mode) {
   const k = termKey(), admin = mode === 'admin';
   document.title = '인준T LMS';
@@ -788,6 +818,7 @@ let curNo = null, qFilter = '';
 function route() {
   if (location.hash === '#code') { viewGate('admin'); return; }
   if (!unlocked()) { viewGate(); return; }
+  if (location.hash === '#name' || !myName()) { viewName(); return; }
   if (!dataReady) { shell('', '<div class="emptymsg">불러오는 중…</div>'); return; }
   if (location.hash === '#notice' || /^#notice-\d+$/.test(location.hash)) { curNo = null; viewNotice(+(location.hash.split('-')[1] || 0)); return; }
   if (location.hash === '#classes') { curNo = null; viewClasses(); return; }
@@ -862,7 +893,7 @@ function viewHome() {
     '<h1>' + bannerTitle(B.title || '') + '</h1>' +
     (B.desc ? '<p class="bdesc">' + esc(B.desc).replace(/\n/g, '<br>') + '</p>' : '') +
     '<div class="bst"><div><b>' + CLASSES.length + '</b><span>운영 반</span></div><div><b>' + lecCount + '</b><span>올라온 강의</span></div><div><b>매일</b><span>당일 업로드</span></div></div></div>' +
-    '<div class="bq">“' + esc(String(todayQuote()).replace(/\*/g, '')) + '”<small>오늘의 한마디 · 인준T</small></div></div></section>';
+    '<div class="bq">“' + esc(String(todayQuote()).replace(/\*/g, '')) + '”<small>오늘의 한마디 · 인준T가 ' + esc(myName()) + josa(myName(), '이에게', '에게') + '</small></div></div></section>';
   const cards = '<section aria-labelledby="ch"><div class="sech"><h2 id="ch"><a href="#classes">강의실</a></h2><a class="more" href="#classes">전체 보기 ›</a></div>' + classCards() + '</section>';
   const items = noticeItems();
   const board = '<div class="bd2"><section aria-labelledby="nh"><div class="sech"><h2 id="nh">공지사항</h2><a class="more" href="#notice">전체 보기 ›</a></div><div class="ntab">' +
