@@ -1054,17 +1054,17 @@ function mountPlayer(id) {
   const fallback = setTimeout(() => {
     if (gotApi || !document.body.contains(box)) return;
     box.classList.add('basic');
-    $('#ytp').outerHTML = '<iframe id="ytp" src="https://www.youtube-nocookie.com/embed/' + id + '?rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&fs=0&cc_load_policy=0" title="강의 영상" allow="autoplay; encrypted-media; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin"></iframe>';
+    $('#ytp').outerHTML = '<iframe id="ytp" src="https://www.youtube-nocookie.com/embed/' + id + '?rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&fs=0&cc_load_policy=0&vq=hd720" title="강의 영상" allow="autoplay; encrypted-media; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin"></iframe>';
   }, 5000);
   loadYT().then(() => {
     gotApi = true; clearTimeout(fallback);
     if (!document.body.contains(box) || box.classList.contains('basic')) return;
-    const pv = { controls: 0, cc_load_policy: 0, cc_lang_pref: 'none', rel: 0, modestbranding: 1, playsinline: 1, iv_load_policy: 3, disablekb: 1, fs: 0, enablejsapi: 1 };
+    const pv = { controls: 0, cc_load_policy: 0, cc_lang_pref: 'none', vq: 'hd720', rel: 0, modestbranding: 1, playsinline: 1, iv_load_policy: 3, disablekb: 1, fs: 0, enablejsapi: 1 };
     if (location.origin && location.origin !== 'null') pv.origin = location.origin;
     YTP = new YT.Player('ytp', {
       host: 'https://www.youtube-nocookie.com', videoId: id, playerVars: pv,
       events: {
-        onReady: () => { tick(); box.classList.add('ready'); noCaptions(); },
+        onReady: () => { tick(); box.classList.add('ready'); noCaptions(); hd(); },
         onError: e => {
           const why = { 2: '영상 주소가 올바르지 않아요.', 5: '이 브라우저에서 재생할 수 없는 영상이에요.', 100: '영상을 찾을 수 없어요. 삭제됐거나 비공개 영상일 수 있어요.', 101: '이 영상은 다른 사이트에서 재생이 막혀 있어요.', 150: '이 영상은 다른 사이트에서 재생이 막혀 있어요.', 153: '영상 재생 설정 오류예요. 사이트 주소(https)로 열어 주세요.' }[e.data] || '영상을 불러오지 못했어요.';
           pend.hidden = false; pend.innerHTML = '<b>영상을 재생할 수 없어요</b><span>' + esc(why) + ' (오류 ' + esc(e.data) + ')</span>';
@@ -1076,7 +1076,7 @@ function mountPlayer(id) {
             pend.hidden = true; setPlaying(true); showCtl();
             clearInterval(ytTimer); ytTimer = setInterval(tick, 250);
             try { YTP.setPlaybackRate(ytSpeed); } catch (er) {}
-            noCaptions(); setTimeout(noCaptions, 800);
+            noCaptions(); setTimeout(noCaptions, 800); hd();
           } else if (st === 2) { if (ytStarted) { setPlaying(false); box.classList.add('ui'); tick(); } }
           else if (st === 0) { setPlaying(false); clearInterval(ytTimer); pov.hidden = true; pend.hidden = false; box.classList.add('ui'); }
         }
@@ -1127,6 +1127,9 @@ function mountPlayer(id) {
     if (e.key === ' ' || e.key === 'k') { e.preventDefault(); toggle(); }
     else if (e.key === 'ArrowLeft') $('#pback').click(); else if (e.key === 'ArrowRight') $('#pfwd').click();
   });
+}
+function hd() {   // 720p로 요청 (유튜브가 받아 주지 않을 수 있어요)
+  try { if (YTP && YTP.setPlaybackQuality) YTP.setPlaybackQuality('hd720'); } catch (e) {}
 }
 function noCaptions() {   // 자막 끄기
   if (!YTP) return;
